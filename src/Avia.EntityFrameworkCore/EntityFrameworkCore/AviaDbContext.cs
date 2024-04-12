@@ -54,10 +54,10 @@ public class AviaDbContext :
     public DbSet<TenantConnectionString> TenantConnectionStrings { get; set; }
 
     // Product
-    public DbSet<Product> Products { get; set; }
+    public virtual DbSet<Product> Products { get; set; }
 
     // Category
-    public DbSet<Category> Categories { get; set; }
+    public virtual DbSet<Category> Categories { get; set; }
 
     #endregion
 
@@ -96,7 +96,7 @@ public class AviaDbContext :
             b.ToTable(AviaConsts.DbTablePrefix + "Products", AviaConsts.DbSchema);
             b.ConfigureByConvention();
             b.Property(x => x.Name).IsRequired().HasMaxLength(128);
-            b.HasOne<Category>().WithMany().HasForeignKey(x => x.CategoryId);
+            b.HasOne(x => x.Category).WithMany(x => x.Products).HasForeignKey(x => x.CategoryId);
         });
 
         builder.Entity<Category>(b =>

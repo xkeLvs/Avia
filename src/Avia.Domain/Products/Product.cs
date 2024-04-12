@@ -12,8 +12,8 @@ public class Product : AuditedAggregateRoot<Guid>
     public required string Name { get; set; }
 
     [Required]
-    public Guid CategoryId { get; set; }
-    public Category? Category { get; set; }
+    public required Guid CategoryId { get; set; }
+    public virtual Category Category { get; set; }
 
     [Required]
     public required float Price { get; set; }

@@ -10,4 +10,5 @@ namespace Avia.Products;
 public class Category : AuditedAggregateRoot<Guid>
 {
     public required string Name { get; set; }
+    public ICollection<Product> Products { get; set; }
 }

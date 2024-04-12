@@ -75,9 +75,6 @@ namespace Avia.Migrations
                     b.Property<Guid>("CategoryId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CategoryId1")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .IsRequired()
@@ -117,8 +114,6 @@ namespace Avia.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
-
-                    b.HasIndex("CategoryId1");
 
                     b.ToTable("AppProducts", (string)null);
                 });
@@ -1870,15 +1865,11 @@ namespace Avia.Migrations
 
             modelBuilder.Entity("Avia.Products.Product", b =>
                 {
-                    b.HasOne("Avia.Products.Category", null)
-                        .WithMany()
+                    b.HasOne("Avia.Products.Category", "Category")
+                        .WithMany("Products")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Avia.Products.Category", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId1");
 
                     b.Navigation("Category");
                 });
@@ -2023,6 +2014,11 @@ namespace Avia.Migrations
                         .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Avia.Products.Category", b =>
+                {
+                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLog", b =>
