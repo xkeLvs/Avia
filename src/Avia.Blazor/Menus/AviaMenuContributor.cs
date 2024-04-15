@@ -58,9 +58,18 @@ public class AviaMenuContributor : IMenuContributor
                     "/products",
                     icon: "fas fa-cube",
                     order: 3
+                ),
+                new ApplicationMenuItem(
+                    AviaMenus.Categories,
+                    l["Categories"],
+                    "/categories",
+                    icon: "fas fa-tags",
+                    order: 3
                 )
             }
         );
+
+        
 
         if (MultiTenancyConsts.IsEnabled)
         {

@@ -1,0 +1,52 @@
+@page "/categories"
+
+@using Avia.Products
+@using Blazorise
+@using Blazorise.DataGrid
+
+<h3>Category List</h3>
+
+<div class="mb-2">
+    <Button Size="Size.Small" Color="Color.Primary" @onclick="() => addCategoryModal.Show()">Add Category</Button>
+</div>
+
+<DataGrid TItem="CategoryDto" Data="@Categories" EditMode="DataGridEditMode.Inline"
+    RowEditOptions="new DataGridRowEditOptions { Mode = DataGridRowEditMode.Save }">
+    <DataGridColumns>
+        <DataGridColumn TItem="CategoryDto" Field="@nameof(CategoryDto.Name)" Caption="Name" Editable="true" />
+        <DataGridColumn TItem="CategoryDto" Caption="Actions">
+            <DisplayTemplate> 
+                @if (context != null)
+                {
+                    <Button Size="Size.Small" Color="Color.Success" @onclick="() =>  EditCategory(context)">Edit</Button>
+                    <Button Size="Size.Small" Color="Color.Danger" @onclick="() =>  DeleteCategory(context)">Delete</Button>
+                }
+            </DisplayTemplate>
+        </DataGridColumn>
+    </DataGridColumns>
+</DataGrid>
+
+<EditForm Model="@createUpdateCategoryDto" OnValidSubmit="@HandleValidSubmit">
+    <Modal @ref="addCategoryModal">
+        <ModalContent Centered>
+            <ModalHeader>
+                <ModalTitle>Add Category</ModalTitle>
+                <CloseButton />
+            </ModalHeader>
+            <ModalBody>
+                <DataAnnotationsValidator />
+
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <InputText id="name" class="form-control" @bind-Value="@createUpdateCategoryDto.Name" />
+                    <ValidationMessage For="@(() => createUpdateCategoryDto.Name)" />
+                </div>
+            </ModalBody>
+            <ModalFooter>
+                @* Clicked="@HideModal" *@
+                <Button Color="Color.Secondary" @onclick="() => addCategoryModal.Hide()">Close</Button>
+                <Button Color="Color.Primary" Type="ButtonType.Submit">Save Changes</Button>
+            </ModalFooter>
+        </ModalContent>
+    </Modal>
+</EditForm>

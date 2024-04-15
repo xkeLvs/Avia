@@ -1,0 +1,103 @@
+@page "/products"
+
+@using Avia.Commons
+@using Avia.Products
+@using Blazorise
+@using Blazorise.DataGrid
+
+
+<h3>Product List</h3>
+
+<Div Class="mb-2">
+    <Button Size="Size.Small" Color="Color.Primary"  @onclick="() =>  ShowModal()">Add Product</Button>
+</Div>
+
+<DataGrid TItem="ProductDto" Data="@Products" EditMode="DataGridEditMode.Inline"
+    RowEditOptions="new DataGridRowEditOptions { Mode = DataGridRowEditMode.Save }">
+    <DataGridColumns>
+        <DataGridColumn TItem="ProductDto" Field="@nameof(ProductDto.Name)" Caption="Name" Editable="true" />
+        <DataGridColumn TItem="ProductDto" Field="@nameof(ProductDto.Price)" Caption="Price" Editable="true" />
+        <DataGridColumn TItem="ProductDto" Field="@nameof(ProductDto.Category.Name)" Caption="Category" Editable="true">
+            <DisplayTemplate>
+                @context.Category?.Name
+            </DisplayTemplate>
+        </DataGridColumn>
+        <DataGridColumn TItem="ProductDto" Field="@nameof(ProductDto.DrinkSize)" Caption="Size" Editable="true" />
+        <DataGridColumn TItem="ProductDto" Field="@nameof(ProductDto.Temperature)" Caption="Temperature"
+            Editable="true" />
+
+        <DataGridColumn TItem="ProductDto" Caption="Actions">
+            <DisplayTemplate>
+                @if (context != null)
+                {
+                    <Button Size="Size.Small" Color="Color.Success" @onclick="() =>  EditProduct(context)">Edit</Button>
+                    <Button Size="Size.Small" Color="Color.Danger" @onclick="() =>  DeleteProduct(context)">Delete</Button>
+                }
+            </DisplayTemplate>
+        </DataGridColumn>
+    </DataGridColumns>
+</DataGrid>
+
+<EditForm Model="@createUpdateProductDto" OnValidSubmit="@HandleValidSubmit">
+    <Modal @ref="addProductModal">
+        <ModalContent Centered>
+            <ModalHeader>
+                <ModalTitle>Add Product</ModalTitle>
+                <CloseButton />
+            </ModalHeader>
+            <ModalBody>
+                <DataAnnotationsValidator />
+                <Div Class="form-group">
+                    <Label for="name">Name:</Label>
+                    <InputText id="name" class="form-control" @bind-Value="@createUpdateProductDto.Name" />
+                    <ValidationMessage For="@(() => createUpdateProductDto.Name)" />
+                </Div>
+
+                <Div Class="form-group">
+                    <Label for="name">Price:</Label>
+                    <InputNumber id="name" class="form-control" @bind-Value="@createUpdateProductDto.Price" />
+                    <ValidationMessage For="@(() => createUpdateProductDto.Name)" />
+                </Div>
+
+                <Div Class="form-group">
+                    <Label for="name">Category:</Label>
+                    <Select @bind-SelectedValue="@createUpdateProductDto.CategoryId">
+                        @foreach (var category in Categories)
+                        {
+                            <SelectItem Value="@category.Id">@category.Name</SelectItem>
+                        }
+                    </Select>
+                    <ValidationMessage For="@(() => createUpdateProductDto.CategoryId)" />
+                </Div>
+
+                <Div Class="form-group">
+                    <Label for="name">Drink Size (for drinks):</Label>
+                    <Select @bind-SelectedValue="@createUpdateProductDto.DrinkSize">
+                        @foreach (var size in DrinkSizes)
+                        {
+                            <SelectItem Value="@size">@Enum.GetName(typeof(DrinkSize), size)</SelectItem>
+                        }
+                    </Select>
+                    <ValidationMessage For="@(() => createUpdateProductDto.DrinkSize)" />
+
+                </Div>
+
+                <Div Class="form-group">
+                    <Label for="name">Drink Temperature (for drinks):</Label>
+                    <Select @bind-SelectedValue="@createUpdateProductDto.Temperature">
+                        @foreach (var temp in Temperatures)
+                        {
+                            <SelectItem Value="@temp">@Enum.GetName(typeof(Temperature), temp)</SelectItem>
+                        }
+                    </Select>
+                    <ValidationMessage For="@(() => createUpdateProductDto.Temperature)" />
+                </Div>
+            </ModalBody>
+            <ModalFooter>
+                @* Clicked="@HideModal" *@
+                <Button Color="Color.Secondary" @onclick="() => addProductModal.Hide()">Close</Button>
+                <Button Color="Color.Primary" Type="ButtonType.Submit">Save Changes</Button>
+            </ModalFooter>
+        </ModalContent>
+    </Modal>
+</EditForm>

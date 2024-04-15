@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using Avia.Commons;
 
 namespace Avia.Products;
 
@@ -13,4 +14,7 @@ public class CreateUpdateProductDto
 
     [Required]
     public float Price { get; set; }
+
+    public DrinkSize? DrinkSize { get; set; }
+    public Temperature? Temperature { get; set; }
 }

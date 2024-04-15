@@ -1,4 +1,5 @@
 ﻿using Avia.Products;
+using Avia.Sales;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
@@ -59,6 +60,9 @@ public class AviaDbContext :
     // Category
     public virtual DbSet<Category> Categories { get; set; }
 
+    //sale 
+    public virtual DbSet<Sale> Sales { get; set; }
+
     #endregion
 
     public AviaDbContext(DbContextOptions<AviaDbContext> options)
@@ -96,7 +100,7 @@ public class AviaDbContext :
             b.ToTable(AviaConsts.DbTablePrefix + "Products", AviaConsts.DbSchema);
             b.ConfigureByConvention();
             b.Property(x => x.Name).IsRequired().HasMaxLength(128);
-            b.HasOne(x => x.Category).WithMany(x => x.Products).HasForeignKey(x => x.CategoryId);
+            b.HasOne(x => x.Category).WithMany(x => x.Products).HasForeignKey(x => x.CategoryId).IsRequired();
         });
 
         builder.Entity<Category>(b =>
@@ -104,6 +108,14 @@ public class AviaDbContext :
             b.ToTable(AviaConsts.DbTablePrefix + "Categories", AviaConsts.DbSchema);
             b.ConfigureByConvention();
             b.Property(x => x.Name).IsRequired().HasMaxLength(128);
+        });
+
+        builder.Entity<Sale>(b =>
+        {
+            b.ToTable(AviaConsts.DbTablePrefix + "Sales", AviaConsts.DbSchema);
+            b.ConfigureByConvention();
+            b.Property(x => x.Name).IsRequired().HasMaxLength(128);
+            b.HasOne(x => x.Product).WithMany(x => x.Sales).HasForeignKey(x => x.ProductId).IsRequired();
         });
     }
 }

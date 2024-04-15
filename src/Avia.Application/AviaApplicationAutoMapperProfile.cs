@@ -14,9 +14,12 @@ public class AviaApplicationAutoMapperProfile : Profile
         // Product
         CreateMap<Product, ProductDto>();
         CreateMap<CreateUpdateProductDto, Product>();
+        CreateMap<CreateUpdateProductDto, ProductDto>();
 
         // Product Category
         CreateMap<Category, CategoryDto>();
         CreateMap<CreateUpdateCategoryDto, Category>();
+        CreateMap<CreateUpdateProductDto, CategoryDto>();
+
     }
 }
