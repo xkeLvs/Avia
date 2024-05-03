@@ -11,11 +11,12 @@
 </div>
 
 <DataGrid TItem="CategoryDto" Data="@Categories" EditMode="DataGridEditMode.Inline"
-    RowEditOptions="new DataGridRowEditOptions { Mode = DataGridRowEditMode.Save }">
+    RowEditOptions="new DataGridRowEditOptions { Mode = DataGridRowEditMode.Save }" Responsive ShowPager ShowPageSizes
+    PagerPosition="DataGridPagerPosition.Bottom" PagerOptions="new(){ ButtonSize=Size.Small }">
     <DataGridColumns>
         <DataGridColumn TItem="CategoryDto" Field="@nameof(CategoryDto.Name)" Caption="Name" Editable="true" />
         <DataGridColumn TItem="CategoryDto" Caption="Actions">
-            <DisplayTemplate> 
+            <DisplayTemplate>
                 @if (context != null)
                 {
                     <Button Size="Size.Small" Color="Color.Success" @onclick="() =>  EditCategory(context)">Edit</Button>

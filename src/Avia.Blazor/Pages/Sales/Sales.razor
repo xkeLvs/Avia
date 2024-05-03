@@ -1,5 +1,63 @@
 @page "/sales"
+@using Avia.Sales
 
 <h3>Sales Page</h3>
+<div class="mb-2">
+    <Button Size="Size.Small" Color="Color.Primary" @onclick="() =>  MethodToTriggerUrl() ">Add Sale</Button>
+</div>
 
-<p>This is the Sales page content.</p>
+
+<Div Class="form-group">
+    Filter By Date:
+    <Addons>
+        <Addon AddonType="AddonType.Body">
+            <DatePicker @ref="@datePicker" TValue="DateTime?" @bind-Date="@dateValue" />
+        </Addon>
+        <Addon AddonType="AddonType.End">
+            <Button Color="Color.Light" Clicked="@(()=>datePicker?.ToggleAsync())">
+                <Icon Name="IconName.CalendarDay" />
+            </Button>
+        </Addon>
+    </Addons>
+    <Button Size="Size.Small" Color="Color.Primary" @onclick="() =>  FilterSalesByDate() ">Filter</Button>
+</Div>
+
+
+<Div>
+    <h4>Total Sales: @FilteredSales.Where(s => s.Product?.Price > 0).Sum(s => s.Product?.Price)</h4>
+    <h4>Total Expenses: @FilteredSales.Where(s => s.Product?.Price < 0).Sum(s => s.Product?.Price)</h4>
+    <h4>Current Money: @FilteredSales.Sum(s => s.Product?.Price)</h4>
+
+</Div>
+
+<DataGrid TItem="SaleDto" Data="@FilteredSales" EditMode="DataGridEditMode.Inline"
+    RowEditOptions="new DataGridRowEditOptions { Mode = DataGridRowEditMode.Save }" Responsive ShowPager ShowPageSizes
+    PagerPosition="DataGridPagerPosition.Bottom" PagerOptions="new(){ ButtonSize=Size.Small }">
+    <DataGridColumns>
+        <DataGridColumn TItem="SaleDto" Field="@nameof(SaleDto.Id)" Caption="Id" Editable="true" />
+        <DataGridColumn TItem="SaleDto" Field="@nameof(SaleDto.Id)" Caption="Product Name" Editable="true">
+            <DisplayTemplate>
+                @context.Product?.Name
+            </DisplayTemplate>
+        </DataGridColumn>
+        <DataGridColumn TItem="SaleDto" Field="@nameof(SaleDto.Id)" Caption="Product Price" Editable="true">
+            <DisplayTemplate>
+                @context.Product?.Price
+            </DisplayTemplate>
+        </DataGridColumn>
+        <DataGridColumn TItem="SaleDto" Field="@nameof(SaleDto.Date)" Caption="Product Price" Editable="true">
+            <DisplayTemplate>
+                @context.Date.ToString("MMMM' 'dd', 'yyyy")
+            </DisplayTemplate>
+        </DataGridColumn>
+        <DataGridColumn TItem="SaleDto" Field="@nameof(SaleDto.Note)" Caption="Note" Editable="true" />
+        <DataGridColumn TItem="SaleDto" Caption="Actions">
+            <DisplayTemplate>
+                @if (context != null)
+                {
+                    <Button Size="Size.Small" Color="Color.Danger" @onclick="() =>  DeleteSale(context)">Delete</Button>
+                }
+            </DisplayTemplate>
+        </DataGridColumn>
+    </DataGridColumns>
+</DataGrid>

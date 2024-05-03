@@ -20,6 +20,9 @@ namespace Avia.Blazor.Pages.Category
 
         private Modal addCategoryModal = new();
 
+        [Inject]
+        IMessageService MessageService { get; set; } = default!;
+
         protected override async Task OnInitializedAsync()
         {
             Categories = await CategoryAppService.GetAllCategoryListAsync();
@@ -36,9 +39,8 @@ namespace Avia.Blazor.Pages.Category
 
         private async Task DeleteCategory(CategoryDto category)
         {
-            // Handle delete logic here
             await CategoryAppService.DeleteAsync(category.Id);
-
+            Categories = new();
             Categories = await CategoryAppService.GetAllCategoryListAsync();
         }
 

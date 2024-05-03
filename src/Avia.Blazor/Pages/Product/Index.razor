@@ -9,11 +9,12 @@
 <h3>Product List</h3>
 
 <Div Class="mb-2">
-    <Button Size="Size.Small" Color="Color.Primary"  @onclick="() =>  ShowModal()">Add Product</Button>
+    <Button Size="Size.Small" Color="Color.Primary" @onclick="() =>  ShowModal()">Add Product</Button>
 </Div>
 
 <DataGrid TItem="ProductDto" Data="@Products" EditMode="DataGridEditMode.Inline"
-    RowEditOptions="new DataGridRowEditOptions { Mode = DataGridRowEditMode.Save }">
+    RowEditOptions="new DataGridRowEditOptions { Mode = DataGridRowEditMode.Save }" Responsive ShowPager ShowPageSizes
+    PagerPosition="DataGridPagerPosition.Bottom" PagerOptions="new(){ ButtonSize=Size.Small }">
     <DataGridColumns>
         <DataGridColumn TItem="ProductDto" Field="@nameof(ProductDto.Name)" Caption="Name" Editable="true" />
         <DataGridColumn TItem="ProductDto" Field="@nameof(ProductDto.Price)" Caption="Price" Editable="true" />

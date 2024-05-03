@@ -114,7 +114,6 @@ public class AviaDbContext :
         {
             b.ToTable(AviaConsts.DbTablePrefix + "Sales", AviaConsts.DbSchema);
             b.ConfigureByConvention();
-            b.Property(x => x.Name).IsRequired().HasMaxLength(128);
             b.HasOne(x => x.Product).WithMany(x => x.Sales).HasForeignKey(x => x.ProductId).IsRequired();
         });
     }

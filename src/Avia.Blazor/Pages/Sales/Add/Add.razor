@@ -1,0 +1,79 @@
+@page "/sales/add"
+@using Avia.Sales
+
+<EditForm Model="@createUpdateSaleDto" OnValidSubmit="@HandleValidSubmit">
+
+    <Div Class="form-group">
+        <Addons>
+            <Addon AddonType="AddonType.Body">
+                <DatePicker @ref="@datePicker" TValue="DateTime?" @bind-Date="@dateValue" />
+            </Addon>
+            <Addon AddonType="AddonType.End">
+                <Button Color="Color.Light" Clicked="@(()=>datePicker?.ToggleAsync())">
+                    <Icon Name="IconName.CalendarDay" />
+                </Button>
+            </Addon>
+        </Addons>
+    </Div>
+    <Div Class="form-group">
+        <TextEdit TextChanged="@OnSearchProduct" Placeholder="Search Product" />
+        <Label for="name">Product:</Label>
+        <Select @bind-SelectedValue="@createUpdateSaleDto.ProductId">
+            @foreach (var product in filteredProducts)
+            {
+                <SelectItem Value="@product.Id">@product.Name (Size: @product.DrinkSize) (Temperature:
+                    @product.Temperature)</SelectItem>
+            }
+        </Select>
+        <ValidationMessage For="@(() => createUpdateSaleDto.ProductId)" />
+    </Div>
+
+    <InputNumber id="quantity" class="form-control" @bind-Value="@Quantity" />
+
+    <Div Class="form-group">
+        <Label for="name">Note:</Label>
+        <InputText id="note" class="form-control" @bind-Value="@note" />
+    </Div>
+
+    <Button Size="Size.Small" Type="ButtonType.Button" Color="Color.Primary"
+        Clicked="@(() =>  AddSaleToSaleDtos())">Add</Button>
+
+    TOTAL: @createUpdateSaleDtos.Sum(s => Products.FirstOrDefault(p => p.Id == s.ProductId)?.Price)
+
+    <DataGrid TItem="Avia.Sales.CreateUpdateSaleDto" Data="@createUpdateSaleDtos" Responsive ShowPager ShowPageSizes
+        PagerPosition="DataGridPagerPosition.Bottom" PagerOptions="new(){ ButtonSize=Size.Small }">
+
+        <DataGridColumns>
+
+            <DataGridColumn TItem="Avia.Sales.CreateUpdateSaleDto"
+                Field="@nameof(Avia.Sales.CreateUpdateSaleDto.ProductId)" Caption="Name" Editable="true">
+                <DisplayTemplate Context="displayContext">
+                    @Products.FirstOrDefault(p => p.Id == displayContext.ProductId)?.Name, (@Products.FirstOrDefault(p
+                    => p.Id == displayContext.ProductId)?.DrinkSize) (@Products.FirstOrDefault(p => p.Id ==
+                    displayContext.ProductId)?.Temperature)
+                </DisplayTemplate>
+            </DataGridColumn>
+
+            <DataGridColumn TItem="Avia.Sales.CreateUpdateSaleDto"
+                Field="@nameof(Avia.Sales.CreateUpdateSaleDto.ProductId)" Caption="Price" Editable="true">
+                <DisplayTemplate Context="displayContext">
+                    @Products.FirstOrDefault(p => p.Id == displayContext.ProductId)?.Price
+                </DisplayTemplate>
+            </DataGridColumn>
+
+            <DataGridColumn TItem="Avia.Sales.CreateUpdateSaleDto"
+                Field="@nameof(Avia.Sales.CreateUpdateSaleDto.Note)" Caption="Note" Editable="true"/>
+
+            <DataGridColumn TItem="Avia.Sales.CreateUpdateSaleDto" Caption="Actions">
+                <DisplayTemplate Context="displayContext">
+                    @if (displayContext != null)
+                    {
+                        <Button Size="Size.Small" Color="Color.Danger" @onclick="() => RemoveSale(displayContext)">Delete</Button>
+                    }
+                </DisplayTemplate>
+            </DataGridColumn>
+        </DataGridColumns>
+    </DataGrid>
+</EditForm>
+
+<Button Size="Size.Small" Color="Color.Primary" @onclick="() =>  HandleValidSubmit() ">Add Sale</Button>

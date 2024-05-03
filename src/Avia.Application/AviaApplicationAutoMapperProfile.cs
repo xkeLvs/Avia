@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Avia.Products;
+using Avia.Sales;
 
 namespace Avia;
 
@@ -20,6 +21,11 @@ public class AviaApplicationAutoMapperProfile : Profile
         CreateMap<Category, CategoryDto>();
         CreateMap<CreateUpdateCategoryDto, Category>();
         CreateMap<CreateUpdateProductDto, CategoryDto>();
+
+        // sales
+        CreateMap<Sale, SaleDto>();
+        CreateMap<CreateUpdateSaleDto, Sale>();
+        CreateMap<CreateUpdateSaleDto, SaleDto>();
 
     }
 }

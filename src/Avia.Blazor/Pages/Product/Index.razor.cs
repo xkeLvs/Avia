@@ -31,6 +31,7 @@ namespace Avia.Blazor.Pages.Product
 
         [Inject]
         IMessageService MessageService { get; set; } = default!;
+
         protected override async Task OnInitializedAsync()
         {
             Products = await ProductAppService.GetAllProductListAsync();
@@ -48,12 +49,11 @@ namespace Avia.Blazor.Pages.Product
 
         private async Task ShowModal()
         {
-            // Handle edit logic here
+            // Handle add logic here
             await addProductModal.Show();
             createUpdateProductDto.CategoryId = Categories.First().Id;
             createUpdateProductDto.DrinkSize = DrinkSizes.First();
             createUpdateProductDto.Temperature = Temperatures.First();
-
         }
 
         private async Task EditProduct(ProductDto product)
@@ -71,7 +71,9 @@ namespace Avia.Blazor.Pages.Product
 
         private async Task DeleteProduct(ProductDto product)
         {
-            await ShowDeleteMessage(product.Id);
+            await ProductAppService.DeleteAsync(product.Id);
+            Products = new();
+            Products = await ProductAppService.GetAllProductListAsync();
         }
 
         private async Task HandleValidSubmit()
@@ -88,15 +90,6 @@ namespace Avia.Blazor.Pages.Product
             selectedProductId = Guid.Empty;
 
             await addProductModal.Hide();
-        }
-
-        async Task ShowDeleteMessage(Guid productId)
-        {
-            if (await MessageService.Confirm("Are you sure you want to confirm?", "Confirmation"))
-            {
-                await ProductAppService.DeleteAsync(productId);
-                Products = await ProductAppService.GetAllProductListAsync();
-            }
         }
     }
 }
