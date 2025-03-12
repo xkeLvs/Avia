@@ -37,7 +37,7 @@ jobs:
 
       - name: dotnet publish apihost
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/apihost
-        working-directory: ./src/Avia.HttpApi.Host # Replace with your project name
+        working-directory: ./src/Avia.HttpApi # Replace with your project name
 
       - name: Generate authserver.pfx
         run: dotnet dev-certs https -v -ep ${{env.DOTNET_ROOT}}/apihost/authserver.pfx -p 2D7AA457-5D33-48D6-936F-C48E5EF468ED # Replace with your password
