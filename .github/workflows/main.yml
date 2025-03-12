@@ -77,7 +77,7 @@ jobs:
         with:
           app-name: 'Avia' # Replace with your app name
           slot-name: 'Production'
-          publish-profile: ${{ secrets.apihostblazorserverPublishSettings }} # Set your Azure Web App to publish your profile as a secret in your repository settings
+          publish-profile: ${{ secrets.APIHOSTBLAZORSERVERPUBLISHSETTINGS }} # Set your Azure Web App to publish your profile as a secret in your repository settings
           package: ./apihost
 
       - name: Download artifact from webapp
@@ -92,5 +92,5 @@ jobs:
         with:
           app-name: 'Avia' # Replace with your app name
           slot-name: 'Production'
-          publish-profile: ${{ secrets.webappblazorserverPublishSettings }} # Set your Azure Web App to publish your profile as a secret in your repository settings
+          publish-profile: ${{ secrets.WEBAPPBLAZORSERVERPUBLISHSETTINGS }} # Set your Azure Web App to publish your profile as a secret in your repository settings
           package: ./webapp
