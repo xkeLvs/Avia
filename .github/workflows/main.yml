@@ -75,7 +75,7 @@ jobs:
         id: deploy-to-webapp-2
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'Avia' # Replace with your app name
+          app-name: 'app-avia-brew-api-sea-dev-001' # Replace with your app name
           slot-name: 'Production'
           publish-profile: ${{ secrets.APIHOSTBLAZORSERVERPUBLISHSETTINGS }} # Set your Azure Web App to publish your profile as a secret in your repository settings
           package: ./apihost
@@ -90,7 +90,7 @@ jobs:
         id: deploy-to-webapp-3
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'Avia' # Replace with your app name
+          app-name: 'app-avia-brew-web-sea-dev-001' # Replace with your app name
           slot-name: 'Production'
           publish-profile: ${{ secrets.WEBAPPBLAZORSERVERPUBLISHSETTINGS }} # Set your Azure Web App to publish your profile as a secret in your repository settings
           package: ./webapp
