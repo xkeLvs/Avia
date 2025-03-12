@@ -24,9 +24,9 @@
 
 
 <Div>
-    <h4>Total Sales: @FilteredSales.Where(s => s.Product?.Price > 0).Sum(s => s.Product?.Price)</h4>
-    <h4>Total Expenses: @FilteredSales.Where(s => s.Product?.Price < 0).Sum(s => s.Product?.Price)</h4>
-    <h4>Current Money: @FilteredSales.Sum(s => s.Product?.Price)</h4>
+    <h4>Total Sales: @FilteredSales.Where(s => s.Price > 0).Sum(s => s.Price)</h4>
+    <h4>Total Expenses: @FilteredSales.Where(s => s.Price < 0).Sum(s => s.Price)</h4>
+    <h4>Current Money: @FilteredSales.Sum(s => s.Price)</h4>
 
 </Div>
 
@@ -40,12 +40,12 @@
                 @context.Product?.Name
             </DisplayTemplate>
         </DataGridColumn>
-        <DataGridColumn TItem="SaleDto" Field="@nameof(SaleDto.Id)" Caption="Product Price" Editable="true">
+        <DataGridColumn TItem="SaleDto" Field="@nameof(SaleDto.Id)" Caption="Price" Editable="true">
             <DisplayTemplate>
-                @context.Product?.Price
+                @context.Price
             </DisplayTemplate>
         </DataGridColumn>
-        <DataGridColumn TItem="SaleDto" Field="@nameof(SaleDto.Date)" Caption="Product Price" Editable="true">
+        <DataGridColumn TItem="SaleDto" Field="@nameof(SaleDto.Date)" Caption="Date" Editable="true">
             <DisplayTemplate>
                 @context.Date.ToString("MMMM' 'dd', 'yyyy")
             </DisplayTemplate>

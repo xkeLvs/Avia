@@ -21,10 +21,10 @@ namespace Avia.EntityFrameworkCore;
 [ReplaceDbContext(typeof(IIdentityDbContext))]
 [ReplaceDbContext(typeof(ITenantManagementDbContext))]
 [ConnectionStringName("Default")]
-public class AviaDbContext :
-    AbpDbContext<AviaDbContext>,
-    IIdentityDbContext,
-    ITenantManagementDbContext
+public class AviaDbContext
+    : AbpDbContext<AviaDbContext>,
+        IIdentityDbContext,
+        ITenantManagementDbContext
 {
     /* Add DbSet properties for your Aggregate Roots / Entities here. */
 
@@ -60,16 +60,13 @@ public class AviaDbContext :
     // Category
     public virtual DbSet<Category> Categories { get; set; }
 
-    //sale 
+    //sale
     public virtual DbSet<Sale> Sales { get; set; }
 
     #endregion
 
     public AviaDbContext(DbContextOptions<AviaDbContext> options)
-        : base(options)
-    {
-
-    }
+        : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -100,7 +97,10 @@ public class AviaDbContext :
             b.ToTable(AviaConsts.DbTablePrefix + "Products", AviaConsts.DbSchema);
             b.ConfigureByConvention();
             b.Property(x => x.Name).IsRequired().HasMaxLength(128);
-            b.HasOne(x => x.Category).WithMany(x => x.Products).HasForeignKey(x => x.CategoryId).IsRequired();
+            b.HasOne(x => x.Category)
+                .WithMany(x => x.Products)
+                .HasForeignKey(x => x.CategoryId)
+                .IsRequired();
         });
 
         builder.Entity<Category>(b =>
@@ -114,7 +114,10 @@ public class AviaDbContext :
         {
             b.ToTable(AviaConsts.DbTablePrefix + "Sales", AviaConsts.DbSchema);
             b.ConfigureByConvention();
-            b.HasOne(x => x.Product).WithMany(x => x.Sales).HasForeignKey(x => x.ProductId).IsRequired();
+            b.HasOne(x => x.Product)
+                .WithMany(x => x.Sales)
+                .HasForeignKey(x => x.ProductId)
+                .IsRequired();
         });
     }
 }

@@ -12,7 +12,6 @@ namespace Avia.Blazor.Pages.Sales.Add
     public partial class Add : ComponentBase
     {
         // Add your code here
-        private List<SaleDto> ListOfSales { get; set; } = new List<SaleDto>();
         public required ISaleAppService SaleAppService { get; set; } // Injected via DI
         public required IProductAppService ProductAppService { get; set; } // Injected via DI
         private CreateUpdateSaleDto createUpdateSaleDto = new();
@@ -20,7 +19,7 @@ namespace Avia.Blazor.Pages.Sales.Add
 
         DatePicker<DateTime?>? datePicker;
         DateTime? dateValue = DateTime.Now;
-        string? note = "";
+        string? Note = "";
 
         private List<ProductDto> Products { get; set; } = new();
         private List<ProductDto> filteredProducts { get; set; } = new();
@@ -30,15 +29,21 @@ namespace Avia.Blazor.Pages.Sales.Add
         [Inject]
         IMessageService MessageService { get; set; } = default!;
 
-        [Inject] 
+        [Inject]
         NavigationManager? NavigationManager { get; set; } // Injected via DI
 
-
         int Quantity = 1;
+        float OverridePrice = 0;
+
+        int age = 1;
+        double income = 8000;
+        bool student = true;
+        bool premium = false;
+
+        int discount;
 
         protected override async Task OnInitializedAsync()
         {
-            ListOfSales = await SaleAppService.GetAllSaleListAsync();
             Products = await ProductAppService.GetAllProductListAsync();
             filteredProducts = Products;
             await ResetSale();
@@ -69,25 +74,29 @@ namespace Avia.Blazor.Pages.Sales.Add
         Task AddSaleToSaleDtos()
         {
             createUpdateSaleDto.Date = dateValue ?? DateTime.Now;
-            createUpdateSaleDto.Note = note;
+            createUpdateSaleDto.Note = Note;
+            createUpdateSaleDto.Price =
+                OverridePrice == 0 ? filteredProducts[0].Price : OverridePrice;
             for (int i = 0; i < Quantity; i++)
             {
                 createUpdateSaleDtos.AddFirst(createUpdateSaleDto);
             }
             Console.WriteLine(JsonSerializer.Serialize(createUpdateSaleDtos));
 
-            // ResetSale();    
-            createUpdateSaleDto = new();
-            filteredProducts = Products;
-            createUpdateSaleDto.ProductId = filteredProducts[0].Id;
+            ResetSale();
+            // createUpdateSaleDto = new();
+            // filteredProducts = Products;
+            // createUpdateSaleDto.ProductId = filteredProducts[0].Id;
             return Task.CompletedTask;
         }
+
 
         Task ResetSale()
         {
             createUpdateSaleDto = new();
-            filteredProducts = Products;
-            createUpdateSaleDto.ProductId = filteredProducts[0].Id;
+            // filteredProducts = Products;
+            OverridePrice = 0;
+            Quantity = 1;
             return Task.CompletedTask;
         }
 
@@ -98,11 +107,11 @@ namespace Avia.Blazor.Pages.Sales.Add
             createUpdateSaleDtos.Remove(sale);
 
             Console.WriteLine(JsonSerializer.Serialize(createUpdateSaleDtos));
-            
+
             createUpdateSaleDto = new();
             filteredProducts = Products;
             createUpdateSaleDto.ProductId = filteredProducts[0].Id;
-            
+
             return Task.CompletedTask;
         }
 
@@ -113,16 +122,6 @@ namespace Avia.Blazor.Pages.Sales.Add
             await SaleAppService.AddSaleListAsync(createUpdateSaleDtos);
 
             NavigationManager?.NavigateTo("/sales");
-        }
-
-        async Task ShowDeleteMessage(Guid saleId)
-        {
-            if (await MessageService.Confirm("Are you sure you want to confirm?", "Confirmation"))
-            {
-                await SaleAppService.DeleteAsync(saleId);
-
-                ListOfSales = await SaleAppService.GetAllSaleListAsync();
-            }
         }
     }
 }

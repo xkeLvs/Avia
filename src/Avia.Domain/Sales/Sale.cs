@@ -16,4 +16,6 @@ public class Sale : AuditedAggregateRoot<Guid>
     public virtual Product? Product { get; set; }
     public DateTime Date { get; set; }
     public string? Note { get; set; }
+    public float Price { get; set; }
+
 }

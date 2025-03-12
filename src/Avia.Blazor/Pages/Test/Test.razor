@@ -1,0 +1,120 @@
+﻿@page "/chat"
+@using System.Collections.Generic
+
+@* Chat Room UI *@
+<div class="chat-container">
+    <h3>Chat Room</h3>
+    <div class="messages">
+        @foreach (var message in messages)
+        {
+            <div class="message">
+                <p>
+                    @message.User
+                </p>
+                <p>
+                    @message.Message
+                </p>
+            </div>
+        }
+    </div>
+    <div class="input-container">
+        <input @bind="newMessage" placeholder="Type your message..." class="message-input"
+            @onkeypress="HandleKeyPress" />
+        <button @onclick="SendMessage" class="send-button">Send</button>
+    </div>
+</div>
+
+@code {
+    private string newMessage;
+    private List<MessageModel> messages = new List<MessageModel>();
+    private List<string> copilotReplyMessages = new List<string>();
+    private HashSet<string> sentMessages = new HashSet<string>();
+
+    private void SendMessage()
+    {
+        if (!string.IsNullOrWhiteSpace(newMessage))
+        {
+            var userMessageModel = new MessageModel();
+            var copilotMessageModel = new MessageModel();
+
+            userMessageModel.User = "You";
+            userMessageModel.Message = newMessage;
+            
+            copilotMessageModel.User = "Copilot";
+            copilotMessageModel.Message = newMessage;
+
+            messages.Add(userMessageModel);
+            messages.Add(copilotMessageModel);
+            newMessage = string.Empty;
+        }
+    }
+
+    private void HandleKeyPress(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            SendMessage();
+        }
+    }
+
+    public class MessageModel
+    {
+        public string User { get; set; }
+        public string Message { get; set; }
+    }
+
+
+}
+
+<style>
+    .chat-container {
+        max-width: 600px;
+        margin: auto;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        padding: 16px;
+        background-color: #f9f9f9;
+    }
+
+    .messages {
+        max-height: 300px;
+        overflow-y: auto;
+        margin-bottom: 10px;
+        border: 1px solid #ddd;
+        padding: 8px;
+        border-radius: 4px;
+        background-color: #fff;
+    }
+
+    .message {
+        margin: 4px 0;
+        padding: 8px;
+        border-radius: 4px;
+        background-color: #e1f5fe;
+    }
+
+    .input-container {
+        display: flex;
+    }
+
+    .message-input {
+        flex: 1;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        margin-right: 10px;
+    }
+
+    .send-button {
+        padding: 10px;
+        border: none;
+        border-radius: 4px;
+        background-color: #007bff;
+        color: white;
+        cursor: pointer;
+    }
+
+    .send-button:hover {
+        background-color: #0056b3;
+    }
+</style>

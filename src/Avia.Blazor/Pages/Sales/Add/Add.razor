@@ -32,13 +32,18 @@
 
     <Div Class="form-group">
         <Label for="name">Note:</Label>
-        <InputText id="note" class="form-control" @bind-Value="@note" />
+        <InputText id="note" class="form-control" @bind-Value="@Note" />
+    </Div>
+
+    <Div Class="form-group">
+        <Label for="name">OVERRIDE PRICE:</Label>
+        <InputNumber id="OverridePrice" class="form-control" @bind-Value="@OverridePrice" />
     </Div>
 
     <Button Size="Size.Small" Type="ButtonType.Button" Color="Color.Primary"
         Clicked="@(() =>  AddSaleToSaleDtos())">Add</Button>
 
-    TOTAL: @createUpdateSaleDtos.Sum(s => Products.FirstOrDefault(p => p.Id == s.ProductId)?.Price)
+    TOTAL: @createUpdateSaleDtos.Sum(s => s.Price);
 
     <DataGrid TItem="Avia.Sales.CreateUpdateSaleDto" Data="@createUpdateSaleDtos" Responsive ShowPager ShowPageSizes
         PagerPosition="DataGridPagerPosition.Bottom" PagerOptions="new(){ ButtonSize=Size.Small }">
@@ -48,27 +53,30 @@
             <DataGridColumn TItem="Avia.Sales.CreateUpdateSaleDto"
                 Field="@nameof(Avia.Sales.CreateUpdateSaleDto.ProductId)" Caption="Name" Editable="true">
                 <DisplayTemplate Context="displayContext">
-                    @Products.FirstOrDefault(p => p.Id == displayContext.ProductId)?.Name, (@Products.FirstOrDefault(p
-                    => p.Id == displayContext.ProductId)?.DrinkSize) (@Products.FirstOrDefault(p => p.Id ==
+                    @Products.FirstOrDefault(p => p.Id == displayContext.ProductId)?.Name,
+                    (@Products.FirstOrDefault(p
+                            => p.Id == displayContext.ProductId)?.DrinkSize) (@Products.FirstOrDefault(p => p.Id ==
                     displayContext.ProductId)?.Temperature)
                 </DisplayTemplate>
             </DataGridColumn>
 
             <DataGridColumn TItem="Avia.Sales.CreateUpdateSaleDto"
-                Field="@nameof(Avia.Sales.CreateUpdateSaleDto.ProductId)" Caption="Price" Editable="true">
-                <DisplayTemplate Context="displayContext">
-                    @Products.FirstOrDefault(p => p.Id == displayContext.ProductId)?.Price
-                </DisplayTemplate>
+                Field="@nameof(Avia.Sales.CreateUpdateSaleDto.Price)" Caption="Price" Editable="true">
             </DataGridColumn>
 
             <DataGridColumn TItem="Avia.Sales.CreateUpdateSaleDto"
-                Field="@nameof(Avia.Sales.CreateUpdateSaleDto.Note)" Caption="Note" Editable="true"/>
+                Field="@nameof(Avia.Sales.CreateUpdateSaleDto.Date)" Caption="Date" Editable="true">
+            </DataGridColumn>
+
+            <DataGridColumn TItem="Avia.Sales.CreateUpdateSaleDto"
+                Field="@nameof(Avia.Sales.CreateUpdateSaleDto.Note)" Caption="Note" Editable="true" />
 
             <DataGridColumn TItem="Avia.Sales.CreateUpdateSaleDto" Caption="Actions">
                 <DisplayTemplate Context="displayContext">
                     @if (displayContext != null)
                     {
-                        <Button Size="Size.Small" Color="Color.Danger" @onclick="() => RemoveSale(displayContext)">Delete</Button>
+                        <Button Size="Size.Small" Color="Color.Danger"
+                            @onclick="() => RemoveSale(displayContext)">Delete</Button>
                     }
                 </DisplayTemplate>
             </DataGridColumn>

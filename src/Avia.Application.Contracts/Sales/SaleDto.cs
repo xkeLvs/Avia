@@ -11,4 +11,5 @@ public class SaleDto : AuditedEntityDto<Guid>
     public virtual ProductDto? Product { get; set; }
     public DateTime Date { get; set; }
     public string? Note { get; set; }
+    public float Price { get; set; }
 }

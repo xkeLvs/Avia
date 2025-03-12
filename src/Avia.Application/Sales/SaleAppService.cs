@@ -1,34 +1,31 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics; // Add the missing using statement for LINQ operations
+using System.Linq;
 using System.Threading.Tasks;
 using Avia.Products;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
-using System.Linq; // Add the missing using statement for LINQ operations
+using Volo.Abp.ObjectMapping;
 
 namespace Avia.Sales;
 
-public class SaleAppService :
-    CrudAppService<
-        Sale,
-        SaleDto,
-        Guid,
-        PagedAndSortedResultRequestDto,
-        CreateUpdateSaleDto>,
-    ISaleAppService
+public class SaleAppService
+    : CrudAppService<Sale, SaleDto, Guid, PagedAndSortedResultRequestDto, CreateUpdateSaleDto>,
+        ISaleAppService
 {
     private readonly IRepository<Product, Guid> _productRepository;
+
     public SaleAppService(
         IRepository<Product, Guid> productRepository,
         IRepository<Sale, Guid> repository
-        )
+    )
         : base(repository)
     {
         _productRepository = productRepository;
     }
 
-    
     public async Task<List<SaleDto>> GetAllSaleListAsync()
     {
         //Get the IQueryable<Book> from the repository
