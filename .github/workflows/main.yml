@@ -35,28 +35,28 @@ jobs:
         run: dotnet run -- "${{ secrets.CONNECTION_STRING }}" # Set your connection string as a secret in your repository settings
         working-directory: ./src/Avia.DbMigrator  # Replace with your project name
 
-      - name: dotnet publish apihost
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/apihost
-        working-directory: ./src/Avia.HttpApi.Host # Replace with your project name
+      # - name: dotnet publish apihost
+      #   run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/apihost
+      #   working-directory: ./src/Avia.HttpApi.Host # Replace with your project name
 
-      - name: Generate authserver.pfx
-        run: dotnet dev-certs https -v -ep ${{env.DOTNET_ROOT}}/apihost/authserver.pfx -p 2D7AA457-5D33-48D6-936F-C48E5EF468ED # Replace with your password
+      # - name: Generate authserver.pfx
+      #   run: dotnet dev-certs https -v -ep ${{env.DOTNET_ROOT}}/apihost/authserver.pfx -p 2D7AA457-5D33-48D6-936F-C48E5EF468ED # Replace with your password
 
-      - name: dotnet publish webapp
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/webapp
-        working-directory: ./src/Avia.Blazor # Replace with your project name
+      # - name: dotnet publish webapp
+      #   run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/webapp
+      #   working-directory: ./src/Avia.Blazor # Replace with your project name
 
-      - name: Upload artifact for apihost
-        uses: actions/upload-artifact@v4
-        with:
-          name: .net-apihost
-          path: ${{env.DOTNET_ROOT}}/apihost
+      # - name: Upload artifact for apihost
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: .net-apihost
+      #     path: ${{env.DOTNET_ROOT}}/apihost
 
-      - name: Upload artifact for webapp
-        uses: actions/upload-artifact@v4
-        with:
-          name: .net-webapp
-          path: ${{env.DOTNET_ROOT}}/webapp
+      # - name: Upload artifact for webapp
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: .net-webapp
+      #     path: ${{env.DOTNET_ROOT}}/webapp
 
   deploy:
     runs-on: ubuntu-latest
